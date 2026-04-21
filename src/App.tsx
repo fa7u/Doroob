@@ -15,7 +15,7 @@ import {
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from './lib/utils';
 import { db, auth, signInWithGoogle, handleFirestoreError } from './lib/firebase';
-import { doc, onSnapshot, setDoc, getDocFromServer } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 
 /**
@@ -36,7 +36,7 @@ const Navbar = () => {
             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
               <Users className="text-white w-6 h-6" />
             </div>
-            <span className="text-2xl font-bold tracking-tight text-indigo-900">مجتمع دروبــ</span>
+            <span className="text-2xl font-bold text-indigo-900">مجتمع دروبــ</span>
           </div>
 
           {/* Desktop Menu */}
@@ -282,26 +282,26 @@ export default function App() {
   useEffect(() => {
     const configRef = doc(db, 'settings', 'config');
     
-    // Initial fetch from server to bypass cache
-    getDocFromServer(configRef).then((snap) => {
-      if (snap.exists()) {
-        setData(snap.data());
-      }
-    }).catch(e => console.error("Server fetch failed:", e));
-
-    const unsubscribe = onSnapshot(configRef, (docSnap) => {
+    // onSnapshot is smart: it returns immediately from cache if available, 
+    // then updates if the server has newer data.
+    const unsubscribe = onSnapshot(configRef, { includeMetadataChanges: true }, (docSnap) => {
       if (docSnap.exists()) {
         // Only update local state if we are NOT in edit mode to prevent overwriting user input
         if (!isEditMode) {
           setData(docSnap.data());
         }
-      } else {
-        // Initialize with default data if empty only if it doesn't exist
+      } else if (!docSnap.metadata.fromCache) {
+        // Only initialize if we are truly sure it doesn't exist on server
         setDoc(configRef, { ...INITIAL_DATA, updatedAt: new Date().toISOString() })
           .catch(err => console.error("Initial write failed:", err));
       }
-      setIsSyncing(false);
+      
+      // We stop the "syncing" spinner as soon as we have ANY data (from cache or server)
+      if (docSnap.exists() || !docSnap.metadata.fromCache) {
+        setIsSyncing(false);
+      }
     });
+
     return () => unsubscribe();
   }, [isEditMode]);
 
@@ -409,14 +409,14 @@ export default function App() {
               <span 
                 contentEditable={activeEditMode}
                 onBlur={(e) => handleUpdate('hero', 'badge', e.currentTarget.innerText)}
-                className={cn("inline-block px-4 py-1.5 mb-6 text-xs font-bold uppercase tracking-widest text-indigo-700 bg-indigo-100/80 rounded-full outline-none backdrop-blur-sm", activeEditMode && "ring-2 ring-indigo-400")}
+                className={cn("inline-block px-4 py-1.5 mb-6 text-xs font-bold uppercase text-indigo-700 bg-indigo-100/80 rounded-full outline-none backdrop-blur-sm", activeEditMode && "ring-2 ring-indigo-400")}
               >
                 {data.hero.badge}
               </span>
               <h1 
                 contentEditable={activeEditMode}
                 onBlur={(e) => handleUpdate('hero', 'title', e.currentTarget.innerText)}
-                className={cn("text-4xl md:text-6xl font-extrabold text-slate-900 mb-8 leading-[1.1] outline-none text-right whitespace-pre-line tracking-tight", activeEditMode && "ring-2 ring-indigo-400 p-2 bg-indigo-50/30 rounded-xl")}
+                className={cn("text-4xl md:text-6xl font-extrabold text-slate-900 mb-8 leading-[1.1] outline-none text-right whitespace-pre-line", activeEditMode && "ring-2 ring-indigo-400 p-2 bg-indigo-50/30 rounded-xl")}
               >
                 {data.hero.title}
               </h1>
@@ -446,7 +446,7 @@ export default function App() {
               <h2 
                 contentEditable={activeEditMode}
                 onBlur={(e) => handleUpdate('features', 'title', e.currentTarget.innerText)}
-                className="text-3xl font-bold mb-8 outline-none text-right tracking-tight"
+                className="text-3xl font-bold mb-8 outline-none text-right"
               >
                 {data.features.title}
               </h2>
@@ -478,7 +478,7 @@ export default function App() {
               <span 
                 contentEditable={activeEditMode}
                 onBlur={(e) => handleUpdate('hero', 'stat', e.currentTarget.innerText)}
-                className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-90 outline-none"
+                className="text-[10px] font-bold uppercase opacity-90 outline-none"
               >
                 {data.hero.stat}
               </span>
@@ -499,7 +499,7 @@ export default function App() {
                 <span 
                   contentEditable={activeEditMode}
                   onBlur={(e) => handleUpdate('members_intro', 'badge', e.currentTarget.innerText)}
-                  className={cn("inline-block px-4 py-1.5 mb-6 text-[10px] font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 rounded-full outline-none", activeEditMode && "ring-2 ring-indigo-400")}
+                  className={cn("inline-block px-4 py-1.5 mb-6 text-[10px] font-bold uppercase text-indigo-600 bg-indigo-50 rounded-full outline-none", activeEditMode && "ring-2 ring-indigo-400")}
                 >
                   {data.members_intro?.badge || "الأعضاء"}
                 </span>
@@ -533,8 +533,8 @@ export default function App() {
           >
             <div className="flex items-center justify-between mb-12 text-right">
               <div className="space-y-1">
-                <h3 className="text-3xl font-bold text-slate-900 tracking-tight">الأعضاء المالكين</h3>
-                <p className="text-sm text-slate-400 font-medium tracking-wide">القيادة الإستراتيجية لمجتمع دروب</p>
+                <h3 className="text-3xl font-bold text-slate-900">الأعضاء المالكين</h3>
+                <p className="text-sm text-slate-400 font-medium">القيادة الإستراتيجية لمجتمع دروب</p>
               </div>
               <div className="p-3 bg-slate-50 rounded-2xl group-hover/team:bg-indigo-50 transition-colors duration-500">
                 <Users className="text-slate-300 w-8 h-8 group-hover/team:text-indigo-400 transition-colors" />
@@ -569,7 +569,7 @@ export default function App() {
               <h3 
                 contentEditable={activeEditMode}
                 onBlur={(e) => handleUpdate('join', 'title', e.currentTarget.innerText)}
-                className="text-4xl font-bold text-white mb-6 relative z-10 outline-none text-center tracking-tight"
+                className="text-4xl font-bold text-white mb-6 relative z-10 outline-none text-center"
               >
                 {data.join.title}
               </h3>
@@ -595,7 +595,7 @@ export default function App() {
                   <span 
                     contentEditable={activeEditMode} 
                     onBlur={(e) => handleUpdate('join', 'cta', e.currentTarget.innerText)} 
-                    className="outline-none tracking-tight relative z-10"
+                    className="outline-none relative z-10"
                   >
                     {data.join.cta}
                   </span>
@@ -605,7 +605,7 @@ export default function App() {
                 {activeEditMode && (
                   <div className="w-full space-y-3 animate-in fade-in slide-in-from-top-4 duration-500 glass-panel p-4 rounded-2xl border-white/5">
                     <div className="flex justify-between items-center px-1">
-                      <span className="text-[10px] text-indigo-400 font-bold tracking-widest uppercase">رابط التوجيه</span>
+                      <span className="text-[10px] text-indigo-400 font-bold uppercase">رابط التوجيه</span>
                       <span className="text-[10px] text-slate-500">سيظهر للمستخدمين عند النقر</span>
                     </div>
                     <input 
@@ -697,7 +697,7 @@ export default function App() {
       )}
 
       <footer className="py-12 bg-transparent text-center">
-        <p className="text-slate-400 text-xs font-medium tracking-wide">
+        <p className="text-slate-400 text-xs font-medium">
           &copy; {new Date().getFullYear()} <span contentEditable={activeEditMode} onBlur={(e) => handleUpdate('footer', 'text', e.currentTarget.innerText)} className="outline-none">{data.footer.text}</span>
         </p>
       </footer>
