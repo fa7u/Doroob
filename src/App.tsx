@@ -400,8 +400,10 @@ export default function App() {
           {/* Main Hero Bento */}
           <motion.section 
             id="about" 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="col-span-12 lg:col-span-8 row-span-1 md:row-span-2 bento-card p-10 md:p-14 flex flex-col justify-center relative overflow-hidden group"
           >
             <div className="absolute -top-10 -right-10 w-64 h-64 bg-indigo-50/50 rounded-full blur-[80px] group-hover:bg-indigo-100/60 transition-all duration-700" />
@@ -434,8 +436,9 @@ export default function App() {
           <motion.section 
             id="features"
             initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1, duration: 0.6 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
             className="col-span-12 lg:col-span-4 row-span-1 md:row-span-2 bento-card cta-gradient p-10 text-white flex flex-col justify-between shadow-2xl shadow-indigo-200/50 relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-full h-full opacity-10 dot-pattern pointer-events-none" />
@@ -487,10 +490,10 @@ export default function App() {
 
           {/* Members Intro Bento */}
           <motion.section 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7 }}
             className="col-span-12 bento-card p-10 md:p-12 bg-white border border-slate-100 relative overflow-hidden"
           >
             <div className="absolute top-0 left-0 w-32 h-32 bg-indigo-50 rounded-br-full opacity-40" />
