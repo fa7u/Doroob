@@ -8,6 +8,7 @@
         "hero": { "type": "object" },
         "members_intro": { "type": "object" },
         "features": { "type": "object" },
+        "scope": { "type": "object" },
         "team": { "type": "object" },
         "join": { "type": "object" },
         "footer": { "type": "object" },

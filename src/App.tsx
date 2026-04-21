@@ -10,12 +10,13 @@ import {
   Camera,
   LogOut,
   LogIn,
-  Lock
+  Lock,
+  WifiOff
 } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from './lib/utils';
 import { db, auth, signInWithGoogle, handleFirestoreError } from './lib/firebase';
-import { doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc, getDocFromServer } from 'firebase/firestore';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 
 /**
@@ -25,7 +26,7 @@ import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 
 // --- Components ---
 
-const Navbar = () => {
+const Navbar = ({ activeEditMode, onReset, isOffline }: { activeEditMode: boolean, onReset: () => void, isOffline?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -36,7 +37,15 @@ const Navbar = () => {
             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
               <Users className="text-white w-6 h-6" />
             </div>
-            <span className="text-2xl font-bold text-indigo-900">مجتمع دروبــ</span>
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold text-indigo-900 leading-none">مجتمع دروبــ</span>
+              {isOffline && (
+                <span className="flex items-center gap-1 text-[8px] font-bold text-red-500 uppercase mt-0.5">
+                  <WifiOff className="w-2 h-2" />
+                  بدون اتصال
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Desktop Menu */}
@@ -44,6 +53,18 @@ const Navbar = () => {
             <a href="#about" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">عن المجتمع</a>
             <a href="#features" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">المميزات</a>
             <a href="#team" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">الأعضاء</a>
+            
+            {activeEditMode && (
+              <button 
+                onClick={onReset}
+                className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-full text-xs font-bold hover:bg-red-100 transition-colors"
+                title="استعادة البيانات الأصلية من الكود"
+              >
+                <Lock className="w-3 h-3" />
+                استعادة الكود الجديد
+              </button>
+            )}
+
             <a href="#join" className="bg-indigo-600 text-white px-6 py-2.5 rounded-full font-bold hover:bg-indigo-700 transition-all shadow-md active:scale-95">
               انضم إلينا
             </a>
@@ -172,7 +193,17 @@ const INITIAL_DATA = {
     "badge": "من نحن؟",
     "title": "مجتمع دروبــ :\n مساحة للنمو المشترك والإبداع المستمر",
     "description": "دروب هي كلمة مقتبسة من دروب التجارة سابقاً مثل درب الحرير و درب البخور وهي مبادرة لمجموعة من المستثمرين الملائكيين، يحظون بخبرة طويلة في قطاعات مختلفة، هدفهم إضافة قيمة مختلفة وتعزيز نمو الشركات الناشئة في منطقة الشرق الأوسط وشمال أفريقيا.",
-    "stat": "أكثر من 500 عضو ملتحق الآن"
+    "stat": "استثمارات الأعضاء في أكثر من 65 شركة ناشئة"
+  },
+  "scope": {
+    "diwaniyah": {
+      "title": "ديوانية دروب",
+      "description": "مجموعة غير رسمية تهدف إلى تبادل الخبرات ونقل المعرفة بين المستثمرين ورواد الأعمال وتمكين العلاقات بينهم وبناء الأسس والمعايير المناسبة لبيئة استثمارية ناجحة ومستدامة."
+    },
+    "entrepreneurs": {
+      "title": "مجتمع رواد الأعمال",
+      "description": "و هي مجموعة من رواد الاعمال، تضم المجموعة نخبة من القيادات تتمتع بخبرة عالية في مختلف القطاعات لتقديم قيمة مضافة لرواد الاعمال في المنطقة"
+    }
   },
   "members_intro": {
     "badge": "الأعضاء",
@@ -185,18 +216,18 @@ const INITIAL_DATA = {
     "items": [
       {
         "id": 1,
-        "title": "شبكة علاقات قوية",
-        "description": "تواصل مع نخبة من الخبراء والمتخصصين في مختلف المجالات ووسع دائرة معارفك المهنية."
+        "title": "نقل المعرفة والتمكين",
+        "description": "نعمل على نقل الخبرات العميقة للأعضاء لتمكين رواد الأعمال والمساهمة الفعالة في ريادة الأعمال."
       },
       {
         "id": 2,
-        "title": "بيئة آمنة وداعمة",
-        "description": "نحن نوفر بيئة حصرية تضمن خصوصية الأعضاء وتشجع على تبادل الخبرات بصدق وشفافية."
+        "title": "بيئة آمنة للمستثمرين",
+        "description": "نوفر بيئة حصرية تضمن الخصوصية وتشجع على تبادل الفرص الاستثمارية بصدق وشفافية."
       },
       {
         "id": 3,
-        "title": "فرص نمو حقيقية",
-        "description": "احصل على وصول حصري لفرص العمل والمشاريع والتعاونات التي لا تتوفر في أي مكان آخر."
+        "title": "وصول استراتيجي",
+        "description": "فتح آفاق وتسهيل وصول الشركات الناشئة إلى خبرات كبار التنفيذيين في كبرى الشركات."
       }
     ]
   },
@@ -206,45 +237,45 @@ const INITIAL_DATA = {
     "members": [
       {
         "id": 1,
-        "name": "عبدالعزيز العبيّد",
-        "bio": "الرئيس التنفيذي لشركة شير الاستثمارية، رئيس مجلس إدارة عدة شركات استثمارية، عضو مجلس إدارة ومؤسس لعدة شركات ناشئة.",
-        "image": "https://picsum.photos/seed/person1/200/200",
-        "linkedin": "https://www.linkedin.com/in/alobaidaziz"
+        "name": "ماجد الكبير",
+        "bio": "خبير في مجال التقنيه المعلوماتية، والاستراتيجية وإدارة المشاريع. عمل كمدير عام للمشاريع في وزارة الطاقة وفي منشآت. مستثمر جريء.",
+        "image": "https://picsum.photos/seed/majed/400/400",
+        "linkedin": "https://www.linkedin.com/in/majed-al-kabeer-9b34a621"
       },
       {
         "id": 2,
         "name": "عبدالملك الحوطي",
-        "bio": "مدير عام متمرس | خبير في إدارة المنتجات ، المبيعات و تطوير الأعمال | مستشار نمو للشركات B2B | ماستر هندسة من جامعة دالهاوسي - كندا.",
-        "image": "https://picsum.photos/seed/person2/200/200",
+        "bio": "متمرس في إدارة المنتجات، المبيعات وتطوير الأعمال. مستشار نمو للشركات B2B. حاصل على ماستر هندسة من جامعة دالهاوسي - كندا.",
+        "image": "https://picsum.photos/seed/malik/400/400",
         "linkedin": "https://www.linkedin.com/in/amalhouti"
       },
       {
         "id": 3,
-        "name": "ماجد الكبير",
-        "bio": "مدير عام | خبير في مجال التقنيه المعلوماتية، والاستراتيجية وإدارة المشاريع | لديه خبرة في قطاعات الطاقة والتجارة والائتمان والتقنية | عمل كمدير عام للمشاريع في وزارة الطاقة | عمل سابقا كمدير عام للمشاريع في منشآت | مستثمر جرئ.",
-        "image": "https://picsum.photos/seed/person3/200/200",
-        "linkedin": "https://www.linkedin.com/in/majed-al-kabeer-9b34a621"
+        "name": "عبدالعزيز العبيّد",
+        "bio": "رئيس مجلس إدارة عدة شركات استثمارية، وعضو مجلس إدارة ومؤسس لعدة شركات ناشئة.",
+        "image": "https://picsum.photos/seed/aziz/400/400",
+        "linkedin": "https://www.linkedin.com/in/alobaidaziz"
       },
       {
         "id": 4,
         "name": "فيصل العبدالسلام",
-        "bio": "المؤسس و رئيس مجلس الادارة لشركة بيورتي لتقنية المعلومات، بالإضافة الى كونـــه المؤســـس و الرئيـــس التنفيـــذي لشركة كورفيجن للاستثمـــار، مستثمـــر ملائكي بأكثر من 65 شركة ناشئة في المحفظة الاستثمارية.",
-        "image": "https://picsum.photos/seed/person4/200/200",
+        "bio": "المؤسس والرئيس التنفيذي لشركة كورفيجن للاستثمار، مستثمر ملائكي بأكثر من 65 شركة ناشئة في المحفظة الاستثمارية.",
+        "image": "https://picsum.photos/seed/faisal/400/400",
         "linkedin": "https://www.linkedin.com/in/faisal-alabdulsalam"
       },
       {
         "id": 5,
-        "name": "عبدالله الجذلاني",
-        "bio": "نائب رئيـــس المبيعـــات التجارية تحكـــم التقنية | الرئيس التنفيذي شركة بلازمـا | عضو مجلس الإدارة عدة شركات | مستثمر ملائكي.",
-        "image": "https://picsum.photos/seed/person5/200/200",
+        "name": "عبد الله الجذلاني",
+        "bio": "نائب رئيس المبيعات التجارية بتحكم التقنية. الرئيس التنفيذي شركة بلازما. عضو مجلس إدارة لعدة شركات ومستثمر ملائكي.",
+        "image": "https://picsum.photos/seed/abdullah/400/400",
         "linkedin": "https://www.linkedin.com/in/al-jazlani-4a30a110a"
       },
       {
         "id": 6,
         "name": "عبدالرحمن المرشود",
-        "bio": "مطور ورائد أعمال ومضيف بودكاست يتمتع بثلاث سنوات من الخبرة العملية في الشركات الناشئة. بدأت مسيرته المهنية بتأسيس شركة علاقات عامة تدعى 'إلهام' التي تنشئ وجودا عبر الإنترنت لمؤسسي الشركات الناشئة.",
-        "image": "https://picsum.photos/seed/person6/200/200",
-        "linkedin": "https://www.linkedin.com/in/almarshoud"
+        "bio": "رائد أعمال متخصص في بناء التواجد الرقمي للمؤسسين ومضيف بودكاست مهتم بمنظومة الشركات الناشئة.",
+        "image": "https://picsum.photos/seed/marshoud/400/400",
+        "linkedin": "https://www.linkedin.com/in/al-marshoud-a-40a23415b"
       }
     ]
   },
@@ -265,10 +296,27 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [isSyncing, setIsSyncing] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isOffline, setIsOffline] = useState(false);
 
   const isAdmin = user?.email === 'langmix2@gmail.com';
   const showEditTools = !import.meta.env.PROD || isAdmin;
   const activeEditMode = isEditMode && isAdmin;
+
+  // Connection Test
+  useEffect(() => {
+    async function testConnection() {
+      try {
+        await getDocFromServer(doc(db, 'settings', 'config'));
+        setIsOffline(false);
+      } catch (error) {
+        if(error instanceof Error && error.message.includes('the client is offline')) {
+          console.error("Please check your Firebase configuration. The client is offline.");
+          setIsOffline(true);
+        }
+      }
+    }
+    testConnection();
+  }, []);
 
   // Sync Auth State
   useEffect(() => {
@@ -286,12 +334,26 @@ export default function App() {
     // then updates if the server has newer data.
     const unsubscribe = onSnapshot(configRef, { includeMetadataChanges: true }, (docSnap) => {
       if (docSnap.exists()) {
-        // Only update local state if we are NOT in edit mode to prevent overwriting user input
+        const firestoreData = docSnap.data();
+        
+        // Merge Logic: Ensure all sections from INITIAL_DATA exist in state
         if (!isEditMode) {
-          setData(docSnap.data());
+          setData((prev: any) => ({
+            ...INITIAL_DATA,
+            ...prev,
+            ...firestoreData,
+            // Deep merge specific sections to ensure code updates propagate
+            hero: { ...INITIAL_DATA.hero, ...(firestoreData.hero || {}) },
+            features: { ...INITIAL_DATA.features, ...(firestoreData.features || {}) },
+            scope: { ...INITIAL_DATA.scope, ...(firestoreData.scope || {}) },
+            team: { ...INITIAL_DATA.team, ...(firestoreData.team || {}) },
+            members_intro: { ...INITIAL_DATA.members_intro, ...(firestoreData.members_intro || {}) },
+            join: { ...INITIAL_DATA.join, ...(firestoreData.join || {}) }
+          }));
         }
       } else if (!docSnap.metadata.fromCache) {
         // Only initialize if we are truly sure it doesn't exist on server
+        console.log("No data found in Firestore. Initializing with INITIAL_DATA...");
         setDoc(configRef, { ...INITIAL_DATA, updatedAt: new Date().toISOString() })
           .catch(err => console.error("Initial write failed:", err));
       }
@@ -352,7 +414,7 @@ export default function App() {
     }
   };
 
-  const handleUpdate = (section: string, field: string, value: string, index?: number) => {
+  const handleUpdate = (section: string, field: string, value: string, index?: number, subfield?: string) => {
     if (!isAdmin) return;
     
     setData((prev: any) => {
@@ -368,12 +430,29 @@ export default function App() {
           newMembers[index] = { ...newMembers[index], [field]: value };
           newData.team = { ...newData.team, members: newMembers };
         }
+      } else if (subfield) {
+        newData[section] = { 
+          ...newData[section], 
+          [field]: { ...newData[section][field], [subfield]: value } 
+        };
       } else {
         newData[section] = { ...newData[section], [field]: value };
       }
       
       return newData;
     });
+  };
+
+  const handleResetData = async () => {
+    if (window.confirm('هل أنت متأكد من رغبتك في استعادة جميع النصوص الأصلية من الكود؟ سيؤدي هذا لمسح أي تعديلات يدوية أجريت سابقاً.')) {
+      try {
+        await setDoc(doc(db, 'settings', 'config'), { ...INITIAL_DATA, updatedAt: new Date().toISOString() });
+        window.location.reload();
+      } catch (err) {
+        console.error("Error resetting data:", err);
+        alert("حدث خطأ أثناء محاولة استعادة البيانات.");
+      }
+    }
   };
 
   if (isSyncing) {
@@ -389,7 +468,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 pb-10 grid-pattern overflow-x-hidden" dir="rtl">
-      <Navbar />
+      <Navbar activeEditMode={activeEditMode} onReset={handleResetData} isOffline={isOffline} />
 
       <main className="max-w-7xl mx-auto px-4 pt-32 pb-20 relative">
         <div className="absolute top-40 -left-64 w-96 h-96 bg-indigo-200/20 rounded-full blur-[100px] pointer-events-none" />
@@ -523,6 +602,62 @@ export default function App() {
                   {data.members_intro?.description}
                 </p>
               </div>
+            </div>
+          </motion.section>
+
+          {/* Doroob Scope Section */}
+          <motion.section 
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             className="col-span-12 lg:col-span-6 bento-card p-8 md:p-10 bg-linear-to-bl from-slate-50 to-white flex flex-col justify-between"
+          >
+            <div>
+              <div className="w-12 h-12 bg-indigo-600/10 rounded-xl flex items-center justify-center mb-6 text-indigo-600">
+                <Users className="w-6 h-6" />
+              </div>
+              <h3 
+                contentEditable={activeEditMode}
+                onBlur={(e) => handleUpdate('scope', 'diwaniyah', e.currentTarget.innerText, undefined, 'title')}
+                className="text-2xl font-bold mb-4 text-slate-900"
+              >
+                {data.scope?.diwaniyah?.title || "ديوانية دروب"}
+              </h3>
+              <p 
+                contentEditable={activeEditMode}
+                onBlur={(e) => handleUpdate('scope', 'diwaniyah', e.currentTarget.innerText, undefined, 'description')}
+                className="text-slate-500 leading-relaxed font-medium"
+              >
+                {data.scope?.diwaniyah?.description}
+              </p>
+            </div>
+          </motion.section>
+
+          <motion.section 
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ delay: 0.1 }}
+             className="col-span-12 lg:col-span-6 bento-card p-8 md:p-10 bg-white border border-indigo-50 flex flex-col justify-between shadow-lg shadow-indigo-100/20"
+          >
+            <div>
+              <div className="w-12 h-12 bg-purple-600/10 rounded-xl flex items-center justify-center mb-6 text-purple-600">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <h3 
+                contentEditable={activeEditMode}
+                onBlur={(e) => handleUpdate('scope', 'entrepreneurs', e.currentTarget.innerText, undefined, 'title')}
+                className="text-2xl font-bold mb-4 text-slate-900"
+              >
+                {data.scope?.entrepreneurs?.title || "مجتمع رواد الأعمال"}
+              </h3>
+              <p 
+                contentEditable={activeEditMode}
+                onBlur={(e) => handleUpdate('scope', 'entrepreneurs', e.currentTarget.innerText, undefined, 'description')}
+                className="text-slate-500 leading-relaxed font-medium"
+              >
+                {data.scope?.entrepreneurs?.description}
+              </p>
             </div>
           </motion.section>
 
