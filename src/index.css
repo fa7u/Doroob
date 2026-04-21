@@ -1,0 +1,51 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+
+@theme {
+  --font-sans: "Tajawal", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-accent: #7c3aed;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply text-slate-900 bg-[#f8fafc];
+  }
+}
+
+@layer components {
+  .bento-card {
+    @apply bg-white border border-slate-200/60 rounded-[32px] transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-100/50 hover:-translate-y-1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+  }
+  
+  .cta-gradient {
+    @apply bg-linear-to-br from-[#4f46e5] via-[#6366f1] to-[#8b5cf6];
+    background-size: 200% 200%;
+    animation: gradientMove 15s ease infinite;
+  }
+
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm transition-all duration-300;
+  }
+
+  .grid-pattern {
+    background-image: radial-gradient(circle at 1px 1px, #e2e8f0 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
+  .dot-pattern {
+    background-image: radial-gradient(#cbd5e1 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

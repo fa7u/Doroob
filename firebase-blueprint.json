@@ -1,0 +1,24 @@
+{
+  "entities": {
+    "SiteContent": {
+      "title": "Site Content",
+      "description": "All content for the Doroob community website",
+      "type": "object",
+      "properties": {
+        "hero": { "type": "object" },
+        "members_intro": { "type": "object" },
+        "features": { "type": "object" },
+        "team": { "type": "object" },
+        "join": { "type": "object" },
+        "footer": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "settings/config": {
+      "schema": "SiteContent",
+      "description": "Global configuration and content for the website"
+    }
+  }
+}
