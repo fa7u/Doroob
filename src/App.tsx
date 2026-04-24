@@ -239,39 +239,39 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
   if (total === 0 && !isEditMode) return null;
 
   return (
-    <div className="w-full py-8 px-4 select-none overflow-hidden text-right">
+    <div className="w-full py-2 px-4 select-none overflow-hidden text-right" dir="rtl">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-end md:items-center justify-between mb-6 gap-6">
-          <div className="flex gap-3 order-2 md:order-1">
-             {total > 0 && (
-               <button 
-                onClick={() => setShowAll(true)}
-                className="px-6 py-3 rounded-2xl bg-orange-50 text-accent font-bold hover:bg-orange-100 transition-all active:scale-95 flex items-center gap-2"
-              >
-                عرض الكل
-                <ArrowRight className="w-4 h-4 rotate-180" />
-              </button>
-             )}
-            {total > 1 && (
+        <div className="flex flex-col items-start justify-between mb-6 gap-4">
+          <div className="space-y-1 text-right">
+            <h3 className="text-3xl md:text-4xl font-black text-slate-900">استثمارات الأعضاء</h3>
+            <p className="text-sm md:text-base text-slate-400 font-medium">دعمنا لأبرز الشركات الناشئة في المنطقة</p>
+          </div>
+          <div className="flex items-center gap-3">
+             {total > 1 && (
               <div className="flex gap-2">
                 <button 
-                  onClick={() => setCurrentIndex((prev) => (prev + 1) % total)}
+                  onClick={() => setCurrentIndex((prev) => (prev - 1 + total) % total)}
                   className="p-3 rounded-full bg-white shadow-sm border border-slate-100 hover:border-orange-200 text-accent transition-all active:scale-90"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
                 <button 
-                  onClick={() => setCurrentIndex((prev) => (prev - 1 + total) % total)}
+                  onClick={() => setCurrentIndex((prev) => (prev + 1) % total)}
                   className="p-3 rounded-full bg-white shadow-sm border border-slate-100 hover:border-orange-200 text-accent transition-all active:scale-90"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
               </div>
             )}
-          </div>
-          <div className="space-y-1 text-right order-1 md:order-2">
-            <h3 className="text-3xl md:text-4xl font-black text-slate-900">استثمارات الأعضاء</h3>
-            <p className="text-sm md:text-base text-slate-400 font-medium">دعمنا لأبرز الشركات الناشئة في المنطقة</p>
+             {total > 0 && (
+               <button 
+                onClick={() => setShowAll(true)}
+                className="px-6 py-2.5 rounded-xl bg-orange-50 text-accent text-sm font-bold hover:bg-orange-100 transition-all active:scale-95 flex items-center gap-2"
+              >
+                عرض الكل
+                <TrendingUp className="w-4 h-4" />
+              </button>
+             )}
           </div>
         </div>
 
@@ -283,7 +283,7 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
               
               const isCenter = position === 0;
               
-              const xSpacing = screenSize === 'sm' ? 120 : 300;
+              const xSpacing = screenSize === 'sm' ? 100 : 250;
 
               return (
                 <motion.div
@@ -292,7 +292,7 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
                   initial={{ opacity: 0, scale: 0.8, x: position * xSpacing }}
                   animate={{
                     opacity: 1,
-                    scale: isCenter ? 1.1 : 0.75,
+                    scale: isCenter ? 1.05 : 0.7,
                     x: position * xSpacing,
                     zIndex: isCenter ? 20 : 10,
                   }}
@@ -442,7 +442,7 @@ const XIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const TeamMember = ({ bio, image, linkedin, isEditMode, onUpdate }: any) => {
+const TeamMember = ({ name, bio, image, linkedin, isEditMode, onUpdate }: any) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -500,6 +500,14 @@ const TeamMember = ({ bio, image, linkedin, isEditMode, onUpdate }: any) => {
       </div>
       
       <div className="flex-1 min-w-0 space-y-0.5">
+        <h4 
+          contentEditable={isEditMode}
+          suppressContentEditableWarning={true}
+          onBlur={(e) => onUpdate('name', e.currentTarget.innerText)}
+          className={cn("text-base md:text-lg font-bold text-slate-900 outline-none", isEditMode && "ring-1 ring-orange-200 rounded px-1")}
+        >
+          {name || (isEditMode ? "" : "")}
+        </h4>
         <p 
           contentEditable={isEditMode}
           suppressContentEditableWarning={true}
@@ -705,36 +713,42 @@ const INITIAL_DATA = {
     "members": [
       {
         "id": 1,
+        "name": "عبدالرحمن المرشود",
         "bio": "خبير في مجال التقنيه المعلوماتية، والاستراتيجية وإدارة المشاريع. عمل كمدير عام للمشاريع في وزارة الطاقة وفي منشآت. مستثمر جريء.",
         "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400&h=400&auto=format&fit=crop",
         "linkedin": "https://www.linkedin.com/in/majed-al-kabeer-9b34a621"
       },
       {
         "id": 2,
+        "name": "عبدالملك الحوطي",
         "bio": "متمرس في إدارة المنتجات، المبيعات وتطوير الأعمال. مستشار نمو للشركات B2B. حاصل على ماستر هندسة من جامعة دالهاوسي - كندا.",
         "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&h=400&auto=format&fit=crop",
         "linkedin": "https://www.linkedin.com/in/amalhouti"
       },
       {
         "id": 3,
+        "name": "عبدالعزيز العبيّد",
         "bio": "رئيس مجلس إدارة عدة شركات استثمارية، وعضو مجلس إدارة ومؤسس لعدة شركات ناشئة.",
         "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&h=400&auto=format&fit=crop",
         "linkedin": "https://www.linkedin.com/in/alobaidaziz"
       },
       {
         "id": 4,
+        "name": "ماجد الكبير",
         "bio": "المؤسس والرئيس التنفيذي لشركة كورفيجن للاستثمار، مستثمر ملائكي بأكثر من 65 شركة ناشئة في المحفظة الاستثمارية.",
         "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&h=400&auto=format&fit=crop",
         "linkedin": "https://www.linkedin.com/in/faisal-alabdulsalam"
       },
       {
         "id": 5,
+        "name": "فيصل العبدالسلام",
         "bio": "نائب رئيس المبيعات التجارية بتحكم التقنية. الرئيس التنفيذي شركة بلازما. عضو مجلس إدارة لعدة شركات ومستثمر ملائكي.",
         "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&h=400&auto=format&fit=crop",
         "linkedin": "https://www.linkedin.com/in/al-jazlani-4a30a110a"
       },
       {
         "id": 6,
+        "name": "عبدالله الجذلاني",
         "bio": "رائد أعمال متخصص في بناء التواجد الرقمي للمؤسسين ومضيف بودكاست مهتم بمنظومة الشركات الناشئة.",
         "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&h=400&auto=format&fit=crop",
         "linkedin": "https://www.linkedin.com/in/al-marshoud-a-40a23415b"
@@ -775,7 +789,15 @@ export default function App() {
     const savedDraft = localStorage.getItem('doroob_draft_data');
     if (savedDraft) {
       console.log("Draft detected in LocalStorage - applying local backup.");
-      setData(JSON.parse(savedDraft));
+      const parsed = JSON.parse(savedDraft);
+      // Ensure names from INITIAL_DATA are preserved if missing in draft
+      if (parsed.team && parsed.team.members) {
+        parsed.team.members = parsed.team.members.map((m: any, i: number) => ({
+          ...m,
+          name: m.name || INITIAL_DATA.team.members[i]?.name
+        }));
+      }
+      setData(parsed);
     }
 
     async function testConnection() {
@@ -912,10 +934,9 @@ export default function App() {
         if (isAdmin || !isQuotaExceeded) {
           console.log("Saving main config...");
           
-          // Scrub 'name' from team members in payload
+          // Scrub 'name' from team members in payload - REMOVED AS PER USER REQUEST
           const cleanTeam = {
-            ...restData.team,
-            members: restData.team.members.map(({ name: _n, ...m }: any) => m)
+            ...restData.team
           };
 
           await setDoc(configRef, {
@@ -934,13 +955,12 @@ export default function App() {
             // 1. Save/Update current items
             for (let i = 0; i < investments.items.length; i++) {
               const item = investments.items[i];
-              const { docId, name, ...cleanedItem } = item;
+              const { docId, ...cleanedItem } = item;
               itemIds.push(item.id);
               
-              // Ensure name field is DELETED from Firebase document
+              // Maintain name in DB
               const updatePayload: any = { 
                 ...cleanedItem,
-                name: deleteField(), // Explicitly remove from DB
                 updatedAt: new Date().toISOString()
               };
 
@@ -980,19 +1000,8 @@ export default function App() {
             console.log("Batch committed successfully.");
           }
 
-          // Final State Scrub: Remove any lingering 'name' fields from local state
-          const scrubbedData = {
-            ...data,
-            investments: {
-              ...data.investments,
-              items: data.investments.items.map(({ name: _n, ...item }: any) => item)
-            },
-            team: {
-              ...data.team,
-              members: data.team.members.map(({ name: _n, ...m }: any) => m)
-            }
-          };
-          setData(scrubbedData);
+          // Final State Scrub: REMOVED AS PER USER REQUEST
+          setData(data);
 
           // Success: Clear LocalStorage fallback
           localStorage.removeItem('doroob_draft_data');
@@ -1051,13 +1060,11 @@ export default function App() {
           newData.features = { ...newData.features, items: newItems };
         } else if (section === 'team') {
           const newMembers = [...newData.team.members];
-          const { name: _unused, ...cleanMember } = { ...newMembers[index], [field]: value };
-          newMembers[index] = cleanMember;
+          newMembers[index] = { ...newMembers[index], [field]: value };
           newData.team = { ...newData.team, members: newMembers };
         } else if (section === 'investments') {
           const newItems = [...newData.investments.items];
-          const { name: _unused, ...cleanItem } = { ...newItems[index], [field]: value };
-          newItems[index] = cleanItem;
+          newItems[index] = { ...newItems[index], [field]: value };
           newData.investments = { ...newData.investments, items: newItems };
         }
       } else if (subfield) {
@@ -1168,7 +1175,7 @@ export default function App() {
              initial={{ opacity: 0, y: 30 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
-             className="col-span-12 lg:col-span-6 bento-card p-8 md:p-10 bg-linear-to-bl from-slate-50 to-white flex flex-col justify-between"
+             className="col-span-12 lg:col-span-4 bento-card p-8 md:p-10 bg-linear-to-bl from-slate-50 to-white flex flex-col justify-between"
           >
             <div>
               <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 text-primary">
@@ -1200,7 +1207,7 @@ export default function App() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-            className="col-span-12 lg:col-span-4 row-span-1 md:row-span-2 bento-card bg-white p-10 text-slate-900 border border-slate-100 shadow-xl shadow-slate-200/50 relative overflow-hidden"
+            className="col-span-12 lg:col-span-5 row-span-1 md:row-span-2 bento-card bg-white p-10 text-slate-900 border border-slate-100 shadow-xl shadow-slate-200/50 relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-full h-full opacity-5 dot-pattern pointer-events-none" />
             <div className="relative z-10">
@@ -1258,7 +1265,7 @@ export default function App() {
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              transition={{ delay: 0.1 }}
-             className="col-span-12 lg:col-span-8 bento-card p-8 md:p-10 bg-white border border-orange-50 flex flex-col justify-between shadow-lg shadow-orange-100/20"
+             className="col-span-12 lg:col-span-7 bento-card p-8 md:p-10 bg-white border border-orange-50 flex flex-col justify-between shadow-lg shadow-orange-100/20"
           >
             <div>
               <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-6 text-accent">
@@ -1333,7 +1340,7 @@ export default function App() {
             viewport={{ once: true }}
             className="col-span-12 lg:col-span-7 row-span-1 md:row-span-2 bento-card p-8 md:p-10 flex flex-col group/team"
           >
-            <div className="flex items-center justify-between mb-12 text-right">
+            <div className="flex items-center justify-end flex-row-reverse mb-12 text-right gap-4">
               <div className="space-y-1">
                 <h3 className="text-3xl font-bold text-slate-900">الأعضاء المالكين</h3>
                 <p className="text-sm text-slate-400 font-medium">القيادة الإستراتيجية لمجتمع دروب</p>
