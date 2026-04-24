@@ -9,6 +9,7 @@
         "members_intro": { "type": "object" },
         "features": { "type": "object" },
         "scope": { "type": "object" },
+        "investments": { "type": "object" },
         "team": { "type": "object" },
         "join": { "type": "object" },
         "footer": { "type": "object" },
@@ -20,6 +21,10 @@
     "settings/config": {
       "schema": "SiteContent",
       "description": "Global configuration and content for the website"
+    },
+    "investments/{id}": {
+      "schema": "object",
+      "description": "Individual investment items with name and logo"
     }
   }
 }

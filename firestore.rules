@@ -11,25 +11,20 @@ service cloud.firestore {
       return isSignedIn() && request.auth.token.email == 'langmix2@gmail.com' && request.auth.token.email_verified == true;
     }
 
-    function isValidConfig(data) {
-      return data.keys().hasAll(['hero', 'features', 'team', 'join', 'footer', 'updatedAt'])
-        && data.hero is map
-        && data.features is map
-        && data.team is map
-        && data.join is map
-        && data.updatedAt is string;
-    }
-
     // Deep Catch-all Deny
     match /{document=**} {
       allow read, write: if false;
     }
 
-    // Application Configuration
-    match /settings/config {
+    // Application Configuration & Master Documents
+    match /settings/{docId} {
       allow read: if true;
-      allow create, update: if isAdmin() && isValidConfig(request.resource.data);
-      allow delete: if false; // Config should never be deleted
+      allow write: if isAdmin();
+    }
+
+    match /investments/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
     // Legacy or other paths protection
