@@ -250,13 +250,13 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
              {total > 1 && (
               <div className="flex gap-2">
                 <button 
-                  onClick={() => setCurrentIndex((prev) => (prev - 1 + total) % total)}
+                  onClick={() => setCurrentIndex((prev) => (prev + 1) % total)}
                   className="p-3 rounded-full bg-white shadow-sm border border-slate-100 hover:border-orange-200 text-accent transition-all active:scale-90"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
                 <button 
-                  onClick={() => setCurrentIndex((prev) => (prev + 1) % total)}
+                  onClick={() => setCurrentIndex((prev) => (prev - 1 + total) % total)}
                   className="p-3 rounded-full bg-white shadow-sm border border-slate-100 hover:border-orange-200 text-accent transition-all active:scale-90"
                 >
                   <ChevronLeft className="w-5 h-5" />
