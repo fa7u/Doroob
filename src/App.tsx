@@ -239,9 +239,9 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
   if (total === 0 && !isEditMode) return null;
 
   return (
-    <div className="w-full py-16 px-4 select-none overflow-hidden text-right">
+    <div className="w-full py-8 px-4 select-none overflow-hidden text-right">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-end md:items-center justify-between mb-16 gap-6">
+        <div className="flex flex-col md:flex-row items-end md:items-center justify-between mb-6 gap-6">
           <div className="flex gap-3 order-2 md:order-1">
              {total > 0 && (
                <button 
@@ -255,13 +255,13 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
             {total > 1 && (
               <div className="flex gap-2">
                 <button 
-                  onClick={() => setCurrentIndex((prev) => (prev - 1 + total) % total)}
+                  onClick={() => setCurrentIndex((prev) => (prev + 1) % total)}
                   className="p-3 rounded-full bg-white shadow-sm border border-slate-100 hover:border-orange-200 text-accent transition-all active:scale-90"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
                 <button 
-                  onClick={() => setCurrentIndex((prev) => (prev + 1) % total)}
+                  onClick={() => setCurrentIndex((prev) => (prev - 1 + total) % total)}
                   className="p-3 rounded-full bg-white shadow-sm border border-slate-100 hover:border-orange-200 text-accent transition-all active:scale-90"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -275,7 +275,7 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
           </div>
         </div>
 
-        <div className="relative flex items-center justify-center h-80 md:h-96 overflow-visible">
+        <div className="relative flex items-center justify-center h-48 md:h-64 overflow-visible">
           <MotionAnimatePresence initial={false} mode="sync">
             {getVisibleItems().map((itemIndex, i) => {
               const item = items[itemIndex];
@@ -292,7 +292,7 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
                   initial={{ opacity: 0, scale: 0.8, x: position * xSpacing }}
                   animate={{
                     opacity: 1,
-                    scale: isCenter ? 1.15 : 0.75,
+                    scale: isCenter ? 1.1 : 0.75,
                     x: position * xSpacing,
                     zIndex: isCenter ? 20 : 10,
                   }}
@@ -305,8 +305,8 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
                   }}
                   className={cn(
                     "absolute flex items-center justify-center overflow-hidden transition-shadow duration-500",
-                    isCenter ? "shadow-[0_25px_60px_rgba(180,83,9,0.25)] ring-4 ring-orange-500/20 bg-white" : "brightness-50 grayscale-[50%] bg-slate-50",
-                    screenSize === 'sm' ? "w-36 h-36 rounded-2xl" : "w-64 h-64 rounded-[40px]"
+                    isCenter ? "shadow-[0_20px_50px_rgba(180,83,9,0.2)] ring-4 ring-orange-500/10 bg-white" : "brightness-50 grayscale-[50%] bg-slate-50",
+                    screenSize === 'sm' ? "w-32 h-32 rounded-2xl" : "w-56 h-56 rounded-[32px]"
                   )}
                   onClick={() => !isCenter && setCurrentIndex(itemIndex)}
                 >
@@ -1119,7 +1119,7 @@ export default function App() {
     <div className="min-h-screen bg-[#fdfaf8] text-slate-900 selection:bg-orange-100 selection:text-orange-900 pb-10 grid-pattern overflow-x-hidden" dir="rtl">
       <Navbar activeEditMode={activeEditMode} onReset={handleResetData} isOffline={isOffline} />
 
-      <main className="max-w-7xl mx-auto px-4 pt-32 pb-20 relative">
+      <main className="max-w-7xl mx-auto px-4 pt-24 pb-12 relative">
         <div className="absolute top-40 -left-64 w-96 h-96 bg-orange-200/20 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute bottom-0 -right-64 w-96 h-96 bg-orange-200/10 rounded-full blur-[100px] pointer-events-none" />
 
@@ -1132,7 +1132,7 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="col-span-12 lg:col-span-8 row-span-1 md:row-span-2 bento-card bg-white p-10 md:p-14 flex flex-col justify-center relative overflow-hidden group text-slate-900 border border-slate-100 shadow-xl shadow-slate-200/50"
+            className="col-span-12 lg:col-span-8 row-span-1 md:row-span-2 bento-card bg-white p-8 md:p-10 flex flex-col justify-center relative overflow-hidden group text-slate-900 border border-slate-100 shadow-xl shadow-slate-200/50"
           >
             <div className="absolute -top-10 -right-10 w-64 h-64 bg-orange-50 rounded-full blur-[80px] group-hover:scale-110 transition-transform duration-700" />
             <div className="relative z-10">
@@ -1144,14 +1144,14 @@ export default function App() {
               >
                 {data.hero.badge}
               </span>
-              <h1 
-                contentEditable={activeEditMode}
-                suppressContentEditableWarning={true}
-                onBlur={(e) => handleUpdate('hero', 'title', e.currentTarget.innerText)}
-                className={cn("text-4xl md:text-6xl font-extrabold text-slate-900 mb-8 leading-[1.1] outline-none text-right whitespace-pre-line", activeEditMode && "ring-2 ring-orange-200 p-2 bg-orange-50/10 rounded-xl")}
-              >
-                {data.hero.title}
-              </h1>
+                <h1 
+                  contentEditable={activeEditMode}
+                  suppressContentEditableWarning={true}
+                  onBlur={(e) => handleUpdate('hero', 'title', e.currentTarget.innerText)}
+                  className={cn("text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-[1.1] outline-none text-right whitespace-pre-line tracking-tight", activeEditMode && "ring-2 ring-orange-200 p-2 bg-orange-50/10 rounded-xl")}
+                >
+                  {data.hero.title}
+                </h1>
               <p 
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
@@ -1293,36 +1293,36 @@ export default function App() {
             className="col-span-12 bento-card p-10 md:p-12 bg-white border border-slate-100 relative overflow-hidden"
           >
             <div className="absolute top-0 left-0 w-32 h-32 bg-orange-50 rounded-br-full opacity-40" />
-            <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
-              <div className="md:w-1/3 text-right">
-                <span 
-                  contentEditable={activeEditMode}
-                  suppressContentEditableWarning={true}
-                  onBlur={(e) => handleUpdate('members_intro', 'badge', e.currentTarget.innerText)}
-                  className={cn("inline-block px-4 py-1.5 mb-6 text-[10px] font-bold uppercase text-primary bg-orange-50 rounded-full outline-none", activeEditMode && "ring-2 ring-primary")}
-                >
-                  {data.members_intro?.badge || "الأعضاء"}
-                </span>
-                <h2 
-                  contentEditable={activeEditMode}
-                  suppressContentEditableWarning={true}
-                  onBlur={(e) => handleUpdate('members_intro', 'title', e.currentTarget.innerText)}
-                  className={cn("text-3xl font-bold text-slate-900 outline-none leading-tight", activeEditMode && "ring-2 ring-orange-400 p-1 rounded")}
-                >
-                  {data.members_intro?.title || "نخبة من القياديين في المملكة"}
-                </h2>
-              </div>
-              <div className="md:w-2/3 border-r-0 md:border-r-2 border-slate-100 pr-0 md:pr-10 text-right">
-                <p 
-                  contentEditable={activeEditMode}
-                  suppressContentEditableWarning={true}
-                  onBlur={(e) => handleUpdate('members_intro', 'description', e.currentTarget.innerText)}
-                  className={cn("text-slate-500 leading-relaxed text-lg md:text-xl outline-none font-medium", activeEditMode && "ring-2 ring-orange-400 p-2 rounded")}
-                >
-                  {data.members_intro?.description}
-                </p>
-              </div>
+          <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
+            <div className="md:w-1/3 text-right">
+              <span 
+                contentEditable={activeEditMode}
+                suppressContentEditableWarning={true}
+                onBlur={(e) => handleUpdate('members_intro', 'badge', e.currentTarget.innerText)}
+                className={cn("inline-block px-4 py-1.5 mb-4 text-[10px] font-bold uppercase text-primary bg-orange-50 rounded-full outline-none", activeEditMode && "ring-2 ring-primary")}
+              >
+                {data.members_intro?.badge || "الأعضاء"}
+              </span>
+              <h2 
+                contentEditable={activeEditMode}
+                suppressContentEditableWarning={true}
+                onBlur={(e) => handleUpdate('members_intro', 'title', e.currentTarget.innerText)}
+                className={cn("text-2xl md:text-3xl font-bold text-slate-900 outline-none leading-tight", activeEditMode && "ring-2 ring-orange-400 p-1 rounded")}
+              >
+                {data.members_intro?.title || "نخبة من القياديين في المملكة"}
+              </h2>
             </div>
+            <div className="md:w-2/3 border-r-0 md:border-r border-slate-100 pr-0 md:pr-8 text-right">
+              <p 
+                contentEditable={activeEditMode}
+                suppressContentEditableWarning={true}
+                onBlur={(e) => handleUpdate('members_intro', 'description', e.currentTarget.innerText)}
+                className={cn("text-slate-500 leading-relaxed text-base md:text-lg outline-none font-medium", activeEditMode && "ring-2 ring-orange-400 p-2 rounded")}
+              >
+                {data.members_intro?.description}
+              </p>
+            </div>
+          </div>
           </motion.section>
 
           {/* Founders Bento */}
@@ -1331,7 +1331,7 @@ export default function App() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="col-span-12 lg:col-span-7 row-span-1 md:row-span-2 bento-card p-10 md:p-14 flex flex-col group/team"
+            className="col-span-12 lg:col-span-7 row-span-1 md:row-span-2 bento-card p-8 md:p-10 flex flex-col group/team"
           >
             <div className="flex items-center justify-between mb-12 text-right">
               <div className="space-y-1">
@@ -1356,7 +1356,7 @@ export default function App() {
           </motion.section>
 
             {/* Investments Slider */}
-            <section className="col-span-12 py-10">
+            <section className="col-span-12 py-6">
               <DoroobInvestments 
                 items={data.investments.items}
                 isEditMode={activeEditMode}
@@ -1524,7 +1524,7 @@ export default function App() {
         </div>
       )}
 
-      <footer className="py-16 bg-transparent text-center border-t border-slate-100/50 mt-12">
+      <footer className="py-10 bg-transparent text-center border-t border-slate-100/50 mt-8">
         <div className="flex flex-col items-center gap-8">
           <div className="flex items-center gap-4">
             <a 

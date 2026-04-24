@@ -22,7 +22,7 @@
 
 @layer components {
   .bento-card {
-    @apply bg-white border border-slate-200/60 rounded-[32px] transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-100/50 hover:-translate-y-1;
+    @apply bg-white border border-slate-200/60 rounded-[32px] transition-all duration-500 hover:shadow-2xl hover:shadow-orange-100/50 hover:-translate-y-1;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
   }
   
