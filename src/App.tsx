@@ -12,6 +12,7 @@ import {
   LogIn,
   Lock,
   WifiOff,
+  Upload,
   ChevronRight,
   ChevronLeft
 } from 'lucide-react';
@@ -82,7 +83,7 @@ const compressImage = (base64Str: string): Promise<string> => {
   });
 };
 
-const Navbar = ({ activeEditMode, onReset, isOffline }: { activeEditMode: boolean, onReset: () => void, isOffline?: boolean }) => {
+const Navbar = ({ data, activeEditMode, onReset, isOffline, onUpdateLogo }: { data: any, activeEditMode: boolean, onReset: () => void, isOffline?: boolean, onUpdateLogo: (field: string, value: string) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -90,11 +91,59 @@ const Navbar = ({ activeEditMode, onReset, isOffline }: { activeEditMode: boolea
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shadow-lg shadow-orange-900/20">
-              <Users className="text-white w-6 h-6" />
+            <div className="relative group/logo">
+              {data.image ? (
+                <div className="relative">
+                  <img 
+                    src={data.image} 
+                    alt="" 
+                    className="h-10 w-auto object-contain transition-transform group-hover/logo:scale-110 duration-500 dark:brightness-0 dark:invert" 
+                  />
+                  <div className="absolute -inset-1 bg-accent/20 blur-xl opacity-0 group-hover/logo:opacity-100 transition-opacity rounded-full -z-10" />
+                </div>
+              ) : (
+                <div className="w-11 h-11 bg-linear-to-br from-accent to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-900/20 group-hover/logo:rotate-12 transition-all duration-500">
+                  <Users className="text-white w-6 h-6" />
+                </div>
+              )}
+              
+              {activeEditMode && (
+                <div className="absolute -bottom-1 -right-1 bg-primary rounded-full p-1.5 shadow-lg border-2 border-white dark:border-slate-900 group-hover/logo:scale-110 transition-transform z-30">
+                  <label className="cursor-pointer">
+                    <input 
+                      type="file" 
+                      className="hidden" 
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = async (readerEvent) => {
+                            const result = readerEvent.target?.result as string;
+                            if (result) {
+                              const compressed = await compressImage(result);
+                              onUpdateLogo('image', compressed);
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                    <Upload className="w-3 h-3 text-white" />
+                  </label>
+                </div>
+              )}
             </div>
+
             <div className="flex flex-col">
-              <span className="text-2xl font-bold text-primary leading-none">مجتمع دروبــ</span>
+              <span 
+                contentEditable={activeEditMode}
+                suppressContentEditableWarning={true}
+                onBlur={(e) => onUpdateLogo('text', e.currentTarget.innerText)}
+                className="text-2xl font-bold text-primary leading-none outline-none"
+              >
+                {data.text || "مجتمع دروبــ"}
+              </span>
               {isOffline && (
                 <span className="flex items-center gap-1 text-[8px] font-bold text-red-500 uppercase mt-0.5">
                   <WifiOff className="w-2 h-2" />
@@ -537,6 +586,10 @@ const TeamMember = ({ name, bio, image, linkedin, isEditMode, onUpdate }: any) =
 // --- Main App ---
 
 const INITIAL_DATA = {
+  "logo": {
+    "text": "دروبـ",
+    "image": ""
+  },
   "hero": {
     "badge": "من نحن؟",
     "title": "مجتمع دروبــ :\n مساحة للنمو المشترك والإبداع المستمر",
@@ -1141,7 +1194,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#fdfaf8] dark:bg-slate-950 text-slate-900 dark:text-white selection:bg-orange-100 dark:selection:bg-orange-900/30 selection:text-orange-900 dark:selection:text-orange-100 pb-10 grid-pattern overflow-x-hidden transition-colors duration-500" dir="rtl">
-      <Navbar activeEditMode={activeEditMode} onReset={handleResetData} isOffline={isOffline} />
+      <Navbar 
+        data={data.logo || { text: "دروبـ", image: "" }} 
+        activeEditMode={activeEditMode} 
+        onReset={handleResetData} 
+        isOffline={isOffline} 
+        onUpdateLogo={(field, value) => handleUpdate('logo', field, value)}
+      />
 
       <main className="max-w-7xl mx-auto px-4 pt-24 pb-12 relative">
         <div className="absolute top-40 -left-64 w-96 h-96 bg-orange-200/20 rounded-full blur-[100px] pointer-events-none" />
@@ -1159,6 +1218,14 @@ export default function App() {
             className="col-span-12 lg:col-span-8 row-span-1 md:row-span-2 bento-card bg-white dark:bg-slate-900 p-8 md:p-10 flex flex-col justify-center relative overflow-hidden group text-slate-900 dark:text-white border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none"
           >
             <div className="absolute -top-10 -right-10 w-64 h-64 bg-orange-50 dark:bg-orange-950/20 rounded-full blur-[80px] group-hover:scale-110 transition-transform duration-700" />
+            
+            {/* Logo Watermark */}
+            {data.logo?.image && (
+              <div className="absolute -bottom-10 -left-10 w-48 h-48 opacity-10 dark:opacity-5 -rotate-12 pointer-events-none group-hover:rotate-0 group-hover:scale-110 transition-all duration-1000">
+                <img src={data.logo.image} alt="" className="w-full h-full object-contain grayscale dark:brightness-0 dark:invert" />
+              </div>
+            )}
+
             <div className="relative z-10">
               <span 
                 contentEditable={activeEditMode}
@@ -1547,6 +1614,17 @@ export default function App() {
 
       <footer className="py-10 bg-transparent text-center border-t border-slate-100/50 dark:border-slate-800/50 mt-8">
         <div className="flex flex-col items-center gap-8">
+          <div className="flex flex-col items-center gap-2">
+            {data.logo?.image ? (
+              <img src={data.logo.image} alt="" className="h-12 w-auto object-contain opacity-50 hover:opacity-100 transition-opacity dark:brightness-0 dark:invert" />
+            ) : (
+              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center">
+                <Users className="text-slate-300 w-6 h-6" />
+              </div>
+            )}
+            <span className="text-sm font-bold text-slate-400 dark:text-slate-500">{data.logo?.text || "مجتمع دروبــ"}</span>
+          </div>
+          
           <div className="flex items-center gap-4">
             <a 
               href={activeEditMode ? undefined : (data?.footer?.twitter || 'https://x.com/doroobangels?s=21')} 
