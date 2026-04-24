@@ -16,7 +16,10 @@
     -webkit-font-smoothing: antialiased;
   }
   body {
-    @apply text-slate-900 bg-[#f8fafc];
+    @apply text-slate-900 bg-[#f8fafc] transition-colors duration-300;
+  }
+  .dark body {
+    @apply text-slate-100 bg-slate-950;
   }
 }
 
@@ -24,6 +27,9 @@
   .bento-card {
     @apply bg-white border border-slate-200/60 rounded-[32px] transition-all duration-500 hover:shadow-2xl hover:shadow-orange-100/50 hover:-translate-y-1;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+  }
+  .dark .bento-card {
+    @apply bg-slate-900 border-slate-800 hover:shadow-orange-900/20;
   }
   
   .cta-gradient {
@@ -35,15 +41,24 @@
   .glass-panel {
     @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm transition-all duration-300;
   }
+  .dark .glass-panel {
+    @apply bg-slate-900/70 border-slate-800/40;
+  }
 
   .grid-pattern {
     background-image: radial-gradient(circle at 1px 1px, #e2e8f0 1px, transparent 0);
     background-size: 40px 40px;
   }
+  .dark .grid-pattern {
+    background-image: radial-gradient(circle at 1px 1px, #1e293b 1px, transparent 0);
+  }
 
   .dot-pattern {
     background-image: radial-gradient(#cbd5e1 1px, transparent 0);
     background-size: 24px 24px;
+  }
+  .dark .dot-pattern {
+    background-image: radial-gradient(#334155 1px, transparent 0);
   }
 }
 

@@ -86,7 +86,7 @@ const Navbar = ({ activeEditMode, onReset, isOffline }: { activeEditMode: boolea
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center gap-2">
@@ -106,14 +106,14 @@ const Navbar = ({ activeEditMode, onReset, isOffline }: { activeEditMode: boolea
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="#about" className="text-gray-600 hover:text-accent transition-colors font-medium">عن المجتمع</a>
-            <a href="#features" className="text-gray-600 hover:text-accent transition-colors font-medium">المميزات</a>
-            <a href="#team" className="text-gray-600 hover:text-accent transition-colors font-medium">الأعضاء</a>
+            <a href="#about" className="text-gray-600 dark:text-gray-300 hover:text-accent transition-colors font-medium">عن المجتمع</a>
+            <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-accent transition-colors font-medium">المميزات</a>
+            <a href="#team" className="text-gray-600 dark:text-gray-300 hover:text-accent transition-colors font-medium">الأعضاء</a>
             
             {activeEditMode && (
               <button 
                 onClick={onReset}
-                className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-full text-xs font-bold hover:bg-red-100 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-full text-xs font-bold hover:bg-red-100 transition-colors"
                 title="استعادة البيانات الأصلية من الكود"
               >
                 <Lock className="w-3 h-3" />
@@ -130,7 +130,7 @@ const Navbar = ({ activeEditMode, onReset, isOffline }: { activeEditMode: boolea
               >
                 سجل اهتمامك
               </a>
-              <a href="#join" className="bg-white border-2 border-accent text-accent px-6 py-2 rounded-full font-bold hover:bg-orange-50 transition-all shadow-sm active:scale-95">
+              <a href="#join" className="bg-white dark:bg-transparent border-2 border-accent text-accent px-6 py-2 rounded-full font-bold hover:bg-orange-50 dark:hover:bg-orange-950/20 transition-all shadow-sm active:scale-95">
                 انضم إلينا
               </a>
             </div>
@@ -148,7 +148,7 @@ const Navbar = ({ activeEditMode, onReset, isOffline }: { activeEditMode: boolea
             </a>
             {/* Mobile Menu Button */}
             <button 
-              className="text-gray-600 p-1"
+              className="text-gray-600 dark:text-gray-300 p-1"
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -162,11 +162,11 @@ const Navbar = ({ activeEditMode, onReset, isOffline }: { activeEditMode: boolea
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-white border-b border-gray-100 p-4 flex flex-col gap-4 font-medium text-center"
+          className="md:hidden bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 p-4 flex flex-col gap-4 font-medium text-center"
         >
-          <a href="#about" onClick={() => setIsOpen(false)} className="py-2 text-gray-600">عن المجتمع</a>
-          <a href="#features" onClick={() => setIsOpen(false)} className="py-2 text-gray-600">المميزات</a>
-          <a href="#team" onClick={() => setIsOpen(false)} className="py-2 text-gray-600">الأعضاء</a>
+          <a href="#about" onClick={() => setIsOpen(false)} className="py-2 text-gray-600 dark:text-gray-300">عن المجتمع</a>
+          <a href="#features" onClick={() => setIsOpen(false)} className="py-2 text-gray-600 dark:text-gray-300">المميزات</a>
+          <a href="#team" onClick={() => setIsOpen(false)} className="py-2 text-gray-600 dark:text-gray-300">الأعضاء</a>
           <a href="#join" onClick={() => setIsOpen(false)} className="bg-accent text-white py-3 rounded-xl shadow-lg">إبدأ الآن</a>
         </motion.div>
       )}
@@ -243,21 +243,21 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col items-start justify-between mb-6 gap-4">
           <div className="space-y-1 text-right">
-            <h3 className="text-3xl md:text-4xl font-black text-slate-900">استثمارات الأعضاء</h3>
-            <p className="text-sm md:text-base text-slate-400 font-medium">دعمنا لأبرز الشركات الناشئة في المنطقة</p>
+            <h3 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">استثمارات الأعضاء</h3>
+            <p className="text-sm md:text-base text-slate-400 dark:text-slate-500 font-medium">دعمنا لأبرز الشركات الناشئة في المنطقة</p>
           </div>
           <div className="flex items-center gap-3">
              {total > 1 && (
               <div className="flex gap-2">
                 <button 
                   onClick={() => setCurrentIndex((prev) => (prev + 1) % total)}
-                  className="p-3 rounded-full bg-white shadow-sm border border-slate-100 hover:border-orange-200 text-accent transition-all active:scale-90"
+                  className="p-3 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 hover:border-orange-200 text-accent transition-all active:scale-90"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
                 <button 
                   onClick={() => setCurrentIndex((prev) => (prev - 1 + total) % total)}
-                  className="p-3 rounded-full bg-white shadow-sm border border-slate-100 hover:border-orange-200 text-accent transition-all active:scale-90"
+                  className="p-3 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 hover:border-orange-200 text-accent transition-all active:scale-90"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -266,7 +266,7 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
              {total > 0 && (
                <button 
                 onClick={() => setShowAll(true)}
-                className="px-6 py-2.5 rounded-xl bg-orange-50 text-accent text-sm font-bold hover:bg-orange-100 transition-all active:scale-95 flex items-center gap-2"
+                className="px-6 py-2.5 rounded-xl bg-orange-50 dark:bg-orange-950/20 text-accent dark:text-orange-400 text-sm font-bold hover:bg-orange-100 dark:hover:bg-orange-950/40 transition-all active:scale-95 flex items-center gap-2"
               >
                 عرض الكل
                 <TrendingUp className="w-4 h-4" />
@@ -353,22 +353,22 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-6xl max-h-[90vh] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col"
+              className="relative w-full max-w-6xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-[40px] shadow-2xl overflow-hidden flex flex-col border dark:border-slate-800"
             >
-              <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
                 <button 
                   onClick={() => setShowAll(false)}
-                  className="p-3 bg-white hover:bg-slate-50 rounded-2xl transition-colors shadow-sm border border-slate-100 text-slate-400 hover:text-slate-900"
+                  className="p-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-2xl transition-colors shadow-sm border border-slate-100 dark:border-slate-700 text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 >
                   <X className="w-6 h-6" />
                 </button>
                 <div className="text-right">
-                  <h4 className="text-2xl font-black text-slate-900">سجل الاستثمارات</h4>
-                  <p className="text-slate-400 text-sm font-medium">قائمة الشركات التي نفخر بدعمها في مجتمع دروبـ</p>
+                  <h4 className="text-2xl font-black text-slate-900 dark:text-white">سجل الاستثمارات</h4>
+                  <p className="text-slate-400 dark:text-slate-500 text-sm font-medium">قائمة الشركات التي نفخر بدعمها في مجتمع دروبـ</p>
                 </div>
               </div>
               
-              <div className="p-8 md:p-12 overflow-y-auto grow custom-scrollbar bg-white">
+              <div className="p-8 md:p-12 overflow-y-auto grow custom-scrollbar bg-white dark:bg-slate-900">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
                   {items.map((item: any, idx: number) => (
                     <motion.div
@@ -378,7 +378,7 @@ const DoroobInvestments = ({ items = [], isEditMode, onUpdate }: any) => {
                       viewport={{ once: true }}
                       className="group relative"
                     >
-                      <div className="aspect-square bg-slate-50 rounded-[32px] overflow-hidden border border-slate-100 group-hover:border-accent/20 transition-all duration-500 shadow-sm group-hover:shadow-xl group-hover:shadow-orange-500/10">
+                      <div className="aspect-square bg-slate-50 dark:bg-slate-800 rounded-[32px] overflow-hidden border border-slate-100 dark:border-slate-700 group-hover:border-accent/20 transition-all duration-500 shadow-sm group-hover:shadow-xl group-hover:shadow-orange-500/10">
                         <img 
                           src={item?.image || ''} 
                           alt=""
@@ -463,7 +463,7 @@ const TeamMember = ({ name, bio, image, linkedin, isEditMode, onUpdate }: any) =
         <img 
           src={image} 
           alt="" 
-          className="w-full h-full rounded-full object-cover ring-4 ring-white shadow-lg transition-all duration-300 group-hover/member:ring-orange-100"
+          className="w-full h-full rounded-full object-cover ring-4 ring-white dark:ring-slate-800 shadow-lg transition-all duration-300 group-hover/member:ring-orange-100 dark:group-hover/member:ring-orange-900/50"
           referrerPolicy="no-referrer"
         />
         
@@ -473,7 +473,7 @@ const TeamMember = ({ name, bio, image, linkedin, isEditMode, onUpdate }: any) =
             href={linkedin} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="absolute -bottom-1 -left-1 bg-white p-1.5 rounded-full shadow-md border border-slate-100 text-accent hover:text-accent-light hover:scale-110 transition-all z-20"
+            className="absolute -bottom-1 -left-1 bg-white dark:bg-slate-800 p-1.5 rounded-full shadow-md border border-slate-100 dark:border-slate-700 text-accent hover:text-accent-light hover:scale-110 transition-all z-20"
           >
             <Linkedin className="w-3 h-3" />
           </a>
@@ -499,12 +499,12 @@ const TeamMember = ({ name, bio, image, linkedin, isEditMode, onUpdate }: any) =
         )}
       </div>
       
-      <div className="flex-1 min-w-0 space-y-0.5">
+      <div className="flex-1 min-w-0 space-y-0.5 text-right">
         <h4 
           contentEditable={isEditMode}
           suppressContentEditableWarning={true}
           onBlur={(e) => onUpdate('name', e.currentTarget.innerText)}
-          className={cn("text-base md:text-lg font-bold text-slate-900 outline-none", isEditMode && "ring-1 ring-orange-200 rounded px-1")}
+          className={cn("text-base md:text-lg font-bold text-slate-900 dark:text-white outline-none", isEditMode && "ring-1 ring-orange-200 rounded px-1")}
         >
           {name || (isEditMode ? "" : "")}
         </h4>
@@ -512,7 +512,7 @@ const TeamMember = ({ name, bio, image, linkedin, isEditMode, onUpdate }: any) =
           contentEditable={isEditMode}
           suppressContentEditableWarning={true}
           onBlur={(e) => onUpdate('bio', e.currentTarget.innerText)}
-          className={cn("text-[10px] md:text-xs text-slate-500 leading-relaxed outline-none min-h-[1.2em]", isEditMode && "ring-1 ring-orange-200 rounded px-1")}
+          className={cn("text-[10px] md:text-xs text-slate-500 dark:text-slate-400 leading-relaxed outline-none min-h-[1.2em]", isEditMode && "ring-1 ring-orange-200 rounded px-1")}
         >
           {bio}
         </p>
@@ -524,7 +524,7 @@ const TeamMember = ({ name, bio, image, linkedin, isEditMode, onUpdate }: any) =
               value={linkedin}
               onChange={(e: any) => onUpdate('linkedin', e.target.value)}
               placeholder="رابط لينكد إن"
-              className="w-full bg-slate-50 border border-slate-200 text-slate-600 px-2 py-0.5 rounded text-[8px] outline-none focus:ring-1 focus:ring-accent/50"
+              className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded text-[8px] outline-none focus:ring-1 focus:ring-accent/50"
               dir="ltr"
             />
           </div>
@@ -782,6 +782,23 @@ export default function App() {
   const isAdmin = user?.email === 'langmix2@gmail.com';
   const showEditTools = !import.meta.env.PROD || isAdmin;
   const activeEditMode = isEditMode && isAdmin;
+
+  // Theme Detection (System Mode)
+  useEffect(() => {
+    const handleThemeChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      if (e.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    handleThemeChange(mediaQuery); // Initial check
+
+    mediaQuery.addEventListener('change', handleThemeChange);
+    return () => mediaQuery.removeEventListener('change', handleThemeChange);
+  }, []);
 
   // Connection Test & Data Sync
   useEffect(() => {
@@ -1113,17 +1130,17 @@ export default function App() {
 
   if (isSyncing) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center transition-colors duration-500">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-slate-500 font-medium animate-pulse text-right">جاري تحميل البيانات...</p>
+          <p className="text-slate-500 dark:text-slate-400 font-medium animate-pulse text-right">جاري تحميل البيانات...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#fdfaf8] text-slate-900 selection:bg-orange-100 selection:text-orange-900 pb-10 grid-pattern overflow-x-hidden" dir="rtl">
+    <div className="min-h-screen bg-[#fdfaf8] dark:bg-slate-950 text-slate-900 dark:text-white selection:bg-orange-100 dark:selection:bg-orange-900/30 selection:text-orange-900 dark:selection:text-orange-100 pb-10 grid-pattern overflow-x-hidden transition-colors duration-500" dir="rtl">
       <Navbar activeEditMode={activeEditMode} onReset={handleResetData} isOffline={isOffline} />
 
       <main className="max-w-7xl mx-auto px-4 pt-24 pb-12 relative">
@@ -1139,15 +1156,15 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="col-span-12 lg:col-span-8 row-span-1 md:row-span-2 bento-card bg-white p-8 md:p-10 flex flex-col justify-center relative overflow-hidden group text-slate-900 border border-slate-100 shadow-xl shadow-slate-200/50"
+            className="col-span-12 lg:col-span-8 row-span-1 md:row-span-2 bento-card bg-white dark:bg-slate-900 p-8 md:p-10 flex flex-col justify-center relative overflow-hidden group text-slate-900 dark:text-white border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none"
           >
-            <div className="absolute -top-10 -right-10 w-64 h-64 bg-orange-50 rounded-full blur-[80px] group-hover:scale-110 transition-transform duration-700" />
+            <div className="absolute -top-10 -right-10 w-64 h-64 bg-orange-50 dark:bg-orange-950/20 rounded-full blur-[80px] group-hover:scale-110 transition-transform duration-700" />
             <div className="relative z-10">
               <span 
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('hero', 'badge', e.currentTarget.innerText)}
-                className={cn("inline-block px-4 py-1.5 mb-6 text-xs font-bold uppercase text-primary bg-orange-50 rounded-full outline-none backdrop-blur-sm", activeEditMode && "ring-2 ring-orange-200")}
+                className={cn("inline-block px-4 py-1.5 mb-6 text-xs font-bold uppercase text-primary bg-orange-50 dark:bg-orange-950/30 rounded-full outline-none backdrop-blur-sm", activeEditMode && "ring-2 ring-orange-200")}
               >
                 {data.hero.badge}
               </span>
@@ -1155,7 +1172,7 @@ export default function App() {
                   contentEditable={activeEditMode}
                   suppressContentEditableWarning={true}
                   onBlur={(e) => handleUpdate('hero', 'title', e.currentTarget.innerText)}
-                  className={cn("text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-[1.1] outline-none text-right whitespace-pre-line tracking-tight", activeEditMode && "ring-2 ring-orange-200 p-2 bg-orange-50/10 rounded-xl")}
+                  className={cn("text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6 leading-[1.1] outline-none text-right whitespace-pre-line tracking-tight", activeEditMode && "ring-2 ring-orange-200 p-2 bg-orange-50/10 rounded-xl")}
                 >
                   {data.hero.title}
                 </h1>
@@ -1163,7 +1180,7 @@ export default function App() {
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('hero', 'description', e.currentTarget.innerText)}
-                className={cn("max-w-2xl text-lg md:text-xl text-slate-500 leading-relaxed italic outline-none text-right opacity-90", activeEditMode && "ring-2 ring-orange-200 p-2 bg-orange-50/10 rounded-xl")}
+                className={cn("max-w-2xl text-lg md:text-xl text-slate-500 dark:text-slate-400 leading-relaxed italic outline-none text-right opacity-90", activeEditMode && "ring-2 ring-orange-200 p-2 bg-orange-50/10 rounded-xl")}
               >
                 "{data.hero.description}"
               </p>
@@ -1172,10 +1189,7 @@ export default function App() {
 
           {/* Doroob Scope Section */}
           <motion.section 
-             initial={{ opacity: 0, y: 30 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             className="col-span-12 lg:col-span-4 bento-card p-8 md:p-10 bg-linear-to-bl from-slate-50 to-white flex flex-col justify-between"
+            className="col-span-12 lg:col-span-4 bento-card p-8 md:p-10 bg-linear-to-bl from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 border border-slate-100 dark:border-slate-800 flex flex-col justify-between"
           >
             <div>
               <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 text-primary">
@@ -1185,7 +1199,7 @@ export default function App() {
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('scope', 'diwaniyah', e.currentTarget.innerText, undefined, 'title')}
-                className="text-2xl font-bold mb-4 text-slate-900"
+                className="text-2xl font-bold mb-4 text-slate-900 dark:text-white"
               >
                 {data.scope?.diwaniyah?.title || "ديوانية دروب"}
               </h3>
@@ -1193,7 +1207,7 @@ export default function App() {
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('scope', 'diwaniyah', e.currentTarget.innerText, undefined, 'description')}
-                className="text-slate-500 leading-relaxed font-medium"
+                className="text-slate-500 dark:text-slate-400 leading-relaxed font-medium"
               >
                 {data.scope?.diwaniyah?.description}
               </p>
@@ -1207,18 +1221,18 @@ export default function App() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-            className="col-span-12 lg:col-span-5 row-span-1 md:row-span-2 bento-card bg-white p-10 text-slate-900 border border-slate-100 shadow-xl shadow-slate-200/50 relative overflow-hidden"
+            className="col-span-12 lg:col-span-5 row-span-1 md:row-span-2 bento-card bg-white dark:bg-slate-900 p-10 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-full h-full opacity-5 dot-pattern pointer-events-none" />
             <div className="relative z-10">
-              <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-8 border border-orange-100 shadow-sm group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-orange-50 dark:bg-orange-950/20 rounded-2xl flex items-center justify-center mb-8 border border-orange-100 dark:border-orange-900/30 shadow-sm group-hover:scale-110 transition-transform">
                 <TrendingUp className="text-primary w-7 h-7" />
               </div>
               <h2 
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('features', 'title', e.currentTarget.innerText)}
-                className="text-3xl font-bold mb-8 outline-none text-right text-slate-900"
+                className="text-3xl font-bold mb-8 outline-none text-right text-slate-900 dark:text-white"
               >
                 {data.features.title}
               </h2>
@@ -1231,14 +1245,14 @@ export default function App() {
                     transition={{ delay: 0.3 + (idx * 0.1) }}
                     className="flex gap-4"
                   >
-                    <div className="bg-orange-50 p-1 rounded-lg h-fit border border-orange-100">
+                    <div className="bg-orange-50 dark:bg-orange-950/30 p-1 rounded-lg h-fit border border-orange-100 dark:border-orange-900/40">
                       <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
                     </div>
                     <p 
                       contentEditable={activeEditMode}
                       suppressContentEditableWarning={true}
                       onBlur={(e) => handleUpdate('features', 'description', e.currentTarget.innerText, idx)}
-                      className="text-slate-500 text-[15px] leading-relaxed outline-none text-right font-medium"
+                      className="text-slate-500 dark:text-slate-400 text-[15px] leading-relaxed outline-none text-right font-medium"
                     >
                       {item.description}
                     </p>
@@ -1246,13 +1260,13 @@ export default function App() {
                 ))}
               </div>
             </div>
-            <div className="relative z-10 pt-8 border-t border-slate-100 flex items-center gap-3">
+            <div className="relative z-10 pt-8 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
               <div className="w-2.5 h-2.5 bg-accent rounded-full animate-pulse shadow-[0_0_15px_rgba(245,158,11,0.4)]" />
               <span 
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('hero', 'stat', e.currentTarget.innerText)}
-                className="text-[10px] font-bold uppercase tracking-wide text-slate-400 outline-none"
+                className="text-[10px] font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500 outline-none"
               >
                 {data.hero.stat}
               </span>
@@ -1265,7 +1279,7 @@ export default function App() {
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              transition={{ delay: 0.1 }}
-             className="col-span-12 lg:col-span-7 bento-card p-8 md:p-10 bg-white border border-orange-50 flex flex-col justify-between shadow-lg shadow-orange-100/20"
+             className="col-span-12 lg:col-span-7 bento-card p-8 md:p-10 bg-white dark:bg-slate-900 border border-orange-50 dark:border-slate-800 flex flex-col justify-between shadow-lg shadow-orange-100/20 dark:shadow-none"
           >
             <div>
               <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-6 text-accent">
@@ -1275,7 +1289,7 @@ export default function App() {
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('scope', 'entrepreneurs', e.currentTarget.innerText, undefined, 'title')}
-                className="text-2xl font-bold mb-4 text-slate-900"
+                className="text-2xl font-bold mb-4 text-slate-900 dark:text-white"
               >
                 {data.scope?.entrepreneurs?.title || "مجتمع رواد الأعمال"}
               </h3>
@@ -1283,7 +1297,7 @@ export default function App() {
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('scope', 'entrepreneurs', e.currentTarget.innerText, undefined, 'description')}
-                className="text-slate-500 leading-relaxed font-medium"
+                className="text-slate-500 dark:text-slate-400 leading-relaxed font-medium"
               >
                 {data.scope?.entrepreneurs?.description}
               </p>
@@ -1297,16 +1311,16 @@ export default function App() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7 }}
-            className="col-span-12 bento-card p-10 md:p-12 bg-white border border-slate-100 relative overflow-hidden"
+            className="col-span-12 bento-card p-10 md:p-12 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 relative overflow-hidden"
           >
-            <div className="absolute top-0 left-0 w-32 h-32 bg-orange-50 rounded-br-full opacity-40" />
+            <div className="absolute top-0 left-0 w-32 h-32 bg-orange-50 dark:bg-orange-950/10 rounded-br-full opacity-40" />
           <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
             <div className="md:w-1/3 text-right">
               <span 
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('members_intro', 'badge', e.currentTarget.innerText)}
-                className={cn("inline-block px-4 py-1.5 mb-4 text-[10px] font-bold uppercase text-primary bg-orange-50 rounded-full outline-none", activeEditMode && "ring-2 ring-primary")}
+                className={cn("inline-block px-4 py-1.5 mb-4 text-[10px] font-bold uppercase text-primary bg-orange-50 dark:bg-orange-950/30 rounded-full outline-none", activeEditMode && "ring-2 ring-primary")}
               >
                 {data.members_intro?.badge || "الأعضاء"}
               </span>
@@ -1314,17 +1328,17 @@ export default function App() {
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('members_intro', 'title', e.currentTarget.innerText)}
-                className={cn("text-2xl md:text-3xl font-bold text-slate-900 outline-none leading-tight", activeEditMode && "ring-2 ring-orange-400 p-1 rounded")}
+                className={cn("text-2xl md:text-3xl font-bold text-slate-900 dark:text-white outline-none leading-tight", activeEditMode && "ring-2 ring-orange-400 p-1 rounded")}
               >
                 {data.members_intro?.title || "نخبة من القياديين في المملكة"}
               </h2>
             </div>
-            <div className="md:w-2/3 border-r-0 md:border-r border-slate-100 pr-0 md:pr-8 text-right">
+            <div className="md:w-2/3 border-r-0 md:border-r border-slate-100 dark:border-slate-800 pr-0 md:pr-8 text-right">
               <p 
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('members_intro', 'description', e.currentTarget.innerText)}
-                className={cn("text-slate-500 leading-relaxed text-base md:text-lg outline-none font-medium", activeEditMode && "ring-2 ring-orange-400 p-2 rounded")}
+                className={cn("text-slate-500 dark:text-slate-400 leading-relaxed text-base md:text-lg outline-none font-medium", activeEditMode && "ring-2 ring-orange-400 p-2 rounded")}
               >
                 {data.members_intro?.description}
               </p>
@@ -1338,15 +1352,15 @@ export default function App() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="col-span-12 lg:col-span-7 row-span-1 md:row-span-2 bento-card p-8 md:p-10 flex flex-col group/team"
+            className="col-span-12 lg:col-span-7 row-span-1 md:row-span-2 bento-card p-8 md:p-10 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex flex-col group/team"
           >
             <div className="flex items-center justify-end flex-row-reverse mb-12 text-right gap-4">
               <div className="space-y-1">
-                <h3 className="text-3xl font-bold text-slate-900">الأعضاء المالكين</h3>
-                <p className="text-sm text-slate-400 font-medium">القيادة الإستراتيجية لمجتمع دروب</p>
+                <h3 className="text-3xl font-bold text-slate-900 dark:text-white">الأعضاء المالكين</h3>
+                <p className="text-sm text-slate-400 dark:text-slate-500 font-medium">القيادة الإستراتيجية لمجتمع دروب</p>
               </div>
-              <div className="p-3 bg-slate-50 rounded-2xl group-hover/team:bg-orange-50 transition-colors duration-500">
-                <Users className="text-slate-300 w-8 h-8 group-hover/team:text-orange-500 transition-colors" />
+              <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl group-hover/team:bg-orange-50 dark:group-hover/team:bg-orange-950/20 transition-colors duration-500">
+                <Users className="text-slate-300 dark:text-slate-600 w-8 h-8 group-hover/team:text-orange-500 transition-colors" />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 grow">
@@ -1384,17 +1398,17 @@ export default function App() {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="grow bg-white rounded-[32px] p-12 flex flex-col items-center justify-center text-center relative overflow-hidden group shadow-2xl shadow-slate-200/50 border border-slate-100"
+              className="grow bg-white dark:bg-slate-900 rounded-[32px] p-12 flex flex-col items-center justify-center text-center relative overflow-hidden group shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800"
             >
-              <div className="absolute inset-0 bg-orange-50/5 pointer-events-none group-hover:bg-orange-50/10 transition-all duration-1000" />
-              <div className="absolute -top-24 -left-24 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
-              <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-orange-50/5 dark:bg-orange-950/5 pointer-events-none group-hover:bg-orange-50/10 dark:group-hover:bg-orange-950/10 transition-all duration-1000" />
+              <div className="absolute -top-24 -left-24 w-64 h-64 bg-orange-500/5 dark:bg-orange-500/10 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
+              <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-orange-500/5 dark:bg-orange-500/10 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
               
               <h3 
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('join', 'title', e.currentTarget.innerText)}
-                className="text-4xl font-bold text-slate-900 mb-6 relative z-10 outline-none text-center"
+                className="text-4xl font-bold text-slate-900 dark:text-white mb-6 relative z-10 outline-none text-center"
               >
                 {data.join.title}
               </h3>
@@ -1402,7 +1416,7 @@ export default function App() {
                 contentEditable={activeEditMode}
                 suppressContentEditableWarning={true}
                 onBlur={(e) => handleUpdate('join', 'description', e.currentTarget.innerText)}
-                className="text-slate-500 text-[15px] mb-12 max-w-xs relative z-10 leading-relaxed outline-none text-center font-medium opacity-80"
+                className="text-slate-500 dark:text-slate-400 text-[15px] mb-12 max-w-xs relative z-10 leading-relaxed outline-none text-center font-medium opacity-80"
               >
                 {data.join.description}
               </p>
@@ -1531,7 +1545,7 @@ export default function App() {
         </div>
       )}
 
-      <footer className="py-10 bg-transparent text-center border-t border-slate-100/50 mt-8">
+      <footer className="py-10 bg-transparent text-center border-t border-slate-100/50 dark:border-slate-800/50 mt-8">
         <div className="flex flex-col items-center gap-8">
           <div className="flex items-center gap-4">
             <a 
@@ -1539,7 +1553,7 @@ export default function App() {
               target="_blank" 
               rel="noopener noreferrer"
               className={cn(
-                "p-3 rounded-2xl bg-white border border-slate-200 text-accent hover:text-accent-light hover:border-orange-200 transition-all shadow-sm group hover:scale-110 active:scale-95",
+                "p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-accent hover:text-accent-light hover:border-orange-200 dark:hover:border-orange-900/30 transition-all shadow-sm group hover:scale-110 active:scale-95",
                 activeEditMode && "cursor-default ring-2 ring-orange-200"
               )}
               title="X"
@@ -1551,7 +1565,7 @@ export default function App() {
               target="_blank" 
               rel="noopener noreferrer"
               className={cn(
-                "p-3 rounded-2xl bg-white border border-slate-200 text-accent hover:text-accent-light hover:border-orange-200 transition-all shadow-sm group hover:scale-110 active:scale-95",
+                "p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-accent hover:text-accent-light hover:border-orange-200 dark:hover:border-orange-900/30 transition-all shadow-sm group hover:scale-110 active:scale-95",
                 activeEditMode && "cursor-default ring-2 ring-orange-200"
               )}
               title="LinkedIn"
@@ -1562,32 +1576,32 @@ export default function App() {
 
           {activeEditMode && (
             <div className="flex flex-col gap-3 w-full max-w-sm animate-in fade-in slide-in-from-top-4">
-              <div className="flex items-center gap-2 bg-white p-2 rounded-xl border border-slate-100 shadow-sm">
+              <div className="flex items-center gap-2 bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
                 <Linkedin className="w-4 h-4 text-accent" />
                 <input 
                   type="url" 
                   value={data.footer.linkedin}
                   onChange={(e: any) => handleUpdate('footer', 'linkedin', e.target.value)}
                   placeholder="رابط لينكد إن للمجتمع"
-                  className="flex-1 text-[11px] outline-none text-left"
+                  className="flex-1 text-[11px] outline-none text-left bg-transparent"
                   dir="ltr"
                 />
               </div>
-              <div className="flex items-center gap-2 bg-white p-2 rounded-xl border border-slate-100 shadow-sm">
+              <div className="flex items-center gap-2 bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
                 <XIcon className="w-4 h-4 text-accent" />
                 <input 
                   type="url" 
                   value={data.footer.twitter}
                   onChange={(e: any) => handleUpdate('footer', 'twitter', e.target.value)}
                   placeholder="رابط اكس (X) للمجتمع"
-                  className="flex-1 text-[11px] outline-none text-left"
+                  className="flex-1 text-[11px] outline-none text-left bg-transparent"
                   dir="ltr"
                 />
               </div>
             </div>
           )}
 
-          <p className="text-slate-400 text-xs font-medium">
+          <p className="text-slate-400 dark:text-slate-500 text-xs font-medium">
             &copy; {new Date().getFullYear()} <span 
               contentEditable={activeEditMode} 
               suppressContentEditableWarning={true}
